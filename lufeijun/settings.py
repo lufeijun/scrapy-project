@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = "lufeijun.spiders"
 #USER_AGENT = "lufeijun (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -37,16 +37,18 @@ ROBOTSTXT_OBEY = True
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-#DEFAULT_REQUEST_HEADERS = {
-#    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-#    "Accept-Language": "en",
-#}
+DEFAULT_REQUEST_HEADERS = {
+   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+   "Accept-Language": "en",
+   "Cookie": "lianjia_ssid=554faf56-e9fa-46bd-b7ca-b62f3b63eaa3; lianjia_uuid=0439427e-f479-4b6d-af2d-265d59d3b224; select_city=110000",
+   "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+}
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    "lufeijun.middlewares.LufeijunSpiderMiddleware": 543,
-#}
+SPIDER_MIDDLEWARES = {
+   "lufeijun.middlewares.LufeijunSpiderMiddleware": 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -62,9 +64,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "lufeijun.pipelines.LufeijunPipeline": 300,
-#}
+ITEM_PIPELINES = {
+  #  "lufeijun.pipelines.LufeijunPipeline": 300,
+  "lufeijun.pipelines.LianjiaPipeline" : 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
