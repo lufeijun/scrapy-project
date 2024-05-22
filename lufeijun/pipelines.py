@@ -10,6 +10,9 @@ import logging
 from pymysql import cursors
 from twisted.enterprise import adbapi
 import copy
+import pymongo
+from twisted.internet import reactor, defer
+
 
 class LufeijunPipeline:
     def process_item(self, item, spider):
@@ -64,3 +67,68 @@ class LianjiaPipeline:
     def handle_error(self, failure, item, spider):
         # #输出错误信息
         print("failure", failure)    
+
+
+class LianjiaMongodbPipeline:
+
+    itemList = []
+    count = 100
+    insertcount = 0
+
+    def __init__(self, uri,port,db,coll,user,pwd):
+        self.client = pymongo.MongoClient(host=uri)
+        self.db = self.client[db]  # 获得数据库的句柄
+        self.coll = self.db[coll]  # 获得collection的句柄
+        # 数据库登录需要帐号密码的话
+        # self.db.authenticate(user, pwd)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        uri=crawler.settings.get('MONGO_HOST')
+        port=crawler.settings.get('MONGO_PORT')
+        db=crawler.settings.get('MONGO_DB')
+        coll=crawler.settings.get('MONGO_COLL')
+        user=crawler.settings.get('MONGO_USER')
+        pwd=crawler.settings.get('MONGO_PSW')
+        return cls(
+            uri = uri,
+            port = port,
+            db = db,
+            coll = coll,
+            user = user,
+            pwd = pwd
+        )
+    def close_spider(self, spider):
+        # 批量插入，最后一步需要插入剩余的
+        if len( self.itemList ) > 0 :
+            self._insert_many()
+        print( "总计插入条数：" , self.insertcount )
+        self.client.close()
+
+    def process_item(self, item, spider):
+
+        # 单条插入
+        # item = copy.deepcopy(item)
+        # self.coll.insert_one(dict(item))
+        # return item
+
+        # 多条批量插入
+        self.itemList.append( dict(item) )
+        if len( self.itemList ) >= self.count:
+            self._insert_many()
+
+
+        # 异步插入，暂时没起作用
+        # defer_out = defer.Deferred()
+        # reactor.callInThread(self._insert, item, defer_out, spider)
+        # yield defer_out
+        # defer.returnValue(item)
+    def _insert_many(self):
+        self.coll.insert_many(self.itemList, ordered=False)
+        self.insertcount += len( self.itemList )
+        self.itemList.clear()
+    # 这块好像是异步插入，没起作用
+    def _insert(self, item, defer_out, spider):
+        print(item)
+        self.coll.insert_one(dict(item))
+        reactor.callFromThread(defer_out.callback, item)

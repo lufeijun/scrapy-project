@@ -20,12 +20,12 @@ NEWSPIDER_MODULE = "lufeijun.spiders"
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 8
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -65,8 +65,9 @@ SPIDER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-  #  "lufeijun.pipelines.LufeijunPipeline": 300,
-  "lufeijun.pipelines.LianjiaPipeline" : 300,
+   # "lufeijun.pipelines.LufeijunPipeline": 300,
+  # "lufeijun.pipelines.LianjiaPipeline" : 300, # 插入 MySQL
+  "lufeijun.pipelines.LianjiaMongodbPipeline" : 300, # 插入 mongodb
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -94,3 +95,13 @@ ITEM_PIPELINES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+LOG_LEVEL='ERROR'
+
+# mongodb 配置
+MONGO_HOST = "mongodb://scrapy-user:123456@192.168.0.75:27017/scrapy"  # 主机IP
+MONGO_PORT = 27017  # 端口号
+MONGO_DB = "scrapy"  # 库名
+MONGO_COLL = "lianjia"  # collection名
+MONGO_USER = "scrapy-user" #用户名
+MONGO_PSW = "123456" #用户密码
