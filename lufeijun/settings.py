@@ -14,12 +14,15 @@ NEWSPIDER_MODULE = "lufeijun.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
+# 设置 UA ，也可以在请求中设置
 #USER_AGENT = "lufeijun (+http://www.yourdomain.com)"
 
-# Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+# Obey robots.txt rules 
+# 不遵守爬虫协议
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
+# 并发度
 #CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
@@ -37,6 +40,7 @@ ROBOTSTXT_OBEY = True
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
+# 设置请求头
 #DEFAULT_REQUEST_HEADERS = {
 #    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 #    "Accept-Language": "en",
@@ -44,15 +48,17 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    "lufeijun.middlewares.LufeijunSpiderMiddleware": 543,
-#}
+# 爬虫中间件
+SPIDER_MIDDLEWARES = {
+   "lufeijun.middlewares.LufeijunSpiderMiddleware": 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "lufeijun.middlewares.LufeijunDownloaderMiddleware": 543,
-#}
+# 下载中间件
+DOWNLOADER_MIDDLEWARES = {
+   "lufeijun.middlewares.LufeijunDownloaderMiddleware": 543,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -62,9 +68,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "lufeijun.pipelines.LufeijunPipeline": 300,
-#}
+# 管道中间件-管数据保存
+ITEM_PIPELINES = {
+   "lufeijun.pipelines.LufeijunPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -91,3 +98,8 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+
+# 日志设置
+# 日志级别 CRITICAL, ERROR, WARNING, INFO, DEBUG
+LOG_LEVEL='ERROR'

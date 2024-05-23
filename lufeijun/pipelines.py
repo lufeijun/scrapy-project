@@ -10,4 +10,6 @@ from itemadapter import ItemAdapter
 
 class LufeijunPipeline:
     def process_item(self, item, spider):
+        print(" LufeijunPipeline -- process_item  ")
+        print(item)
         return item

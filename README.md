@@ -14,4 +14,8 @@ cd lufeijun
 
 scrapy genspider demo http://demo.com
 
+4、执行爬虫
+
+scrapy crawl demo
+
 ```

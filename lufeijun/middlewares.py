@@ -9,6 +9,7 @@ from scrapy import signals
 from itemadapter import is_item, ItemAdapter
 
 
+# spider 中间件
 class LufeijunSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -19,11 +20,13 @@ class LufeijunSpiderMiddleware:
         # This method is used by Scrapy to create your spiders.
         s = cls()
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        crawler.signals.connect(s.spider_closed, signal=signals.spider_closed)
         return s
 
     def process_spider_input(self, response, spider):
         # Called for each response that goes through the spider
         # middleware and into the spider.
+        print(" process_spider_input ")
 
         # Should return None or raise an exception.
         return None
@@ -31,9 +34,12 @@ class LufeijunSpiderMiddleware:
     def process_spider_output(self, response, result, spider):
         # Called with the results returned from the Spider, after
         # it has processed the response.
+        print(" process_spider_output ")
 
         # Must return an iterable of Request, or item objects.
         for i in result:
+            print("process_spider_output result")
+            print(i)
             yield i
 
     def process_spider_exception(self, response, exception, spider):
@@ -47,14 +53,19 @@ class LufeijunSpiderMiddleware:
         # Called with the start requests of the spider, and works
         # similarly to the process_spider_output() method, except
         # that it doesn’t have a response associated.
-
+        print( " process_start_requests " )
+        print( start_requests )
         # Must return only requests (not items).
         for r in start_requests:
             yield r
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
-
+        print("LufeijunSpiderMiddleware --- spider_opened")
+        print(spider)
+        spider.logger.info("Spider Spider opened: %s" % spider.name)
+    # 自己多加一个 spider_closed ，必须在上边做信号对应
+    def spider_closed(self,spider):
+        print("LufeijunSpiderMiddleware --- spider_closed")
 
 class LufeijunDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -100,4 +111,6 @@ class LufeijunDownloaderMiddleware:
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        # print(spider)
+        # spider.sayHello()
+        spider.logger.info("Spider Downloader opened: %s" % spider.name)
