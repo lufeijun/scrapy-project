@@ -112,5 +112,7 @@ class LufeijunDownloaderMiddleware:
 
     def spider_opened(self, spider):
         # print(spider)
+        print("----")
+        print( type(spider) )
         # spider.sayHello()
         spider.logger.info("Spider Downloader opened: %s" % spider.name)
